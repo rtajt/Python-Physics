@@ -53,7 +53,8 @@ def selector(answers):
 
     # Ask user and dispatch to proper converter
     answers = inquirer.prompt(questions)
-    new_quantity = CONVERSION_FUNCS[choice](answers)
+    old_unit, new_unit= CONVERSION_FUNCS[choice](answers)
+    new_quantity = (float(answers["magnitude"]) * old_unit).to(new_unit)
     print(
         f'{answers["magnitude"]} {answers["old_units"].lower()} '
         f'converts to {new_quantity.magnitude} {answers["new_units"].lower()}'
@@ -74,8 +75,7 @@ def length_conversions(answers):
     old_unit = unit_map[answers["old_units"]]
     new_unit = unit_map[answers["new_units"]]
 
-    old_quantity = float(answers["magnitude"]) * old_unit
-    return old_quantity.to(new_unit)
+    return old_unit, new_unit
 
 def area_conversions(answers):
     unit_map = {
@@ -91,9 +91,7 @@ def area_conversions(answers):
 
     old_unit = unit_map[answers["old_units"]]
     new_unit = unit_map[answers["new_units"]]
-
-    old_quantity = float(answers["magnitude"]) * old_unit
-    return old_quantity.to(new_unit)
+    return old_unit, new_unit
 
 def volume_conversions(answers):
     unit_map = {
@@ -113,7 +111,7 @@ def volume_conversions(answers):
     }
     old_unit = unit_map[answers["old_units"]]
     new_unit = unit_map[answers["new_units"]]
-    old_quantity = float(answers["magnitude"]) * old_unit
-    return old_quantity.to(new_unit)
+    return old_unit, new_unit
+
 if __name__ == "__main__":
     main()

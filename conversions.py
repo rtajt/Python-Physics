@@ -16,66 +16,83 @@ def main():
 
 def selector(answers):
     choice = answers["convert_type"]
+
+    # Every unit choice
+    UNIT_OPTIONS = {
+        "Length": ["Millimeters", "Centimeters", "Meters", "Kilometers",
+                   "Inches", "Feet", "Yards", "Miles"],
+
+        "Area": ["Centimeters Squared", "Meters Squared", "Kilometers Squared",
+                 "Inches Squared", "Feet Squared", "Yards Squared",
+                 "Acre", "Miles Squared"]
+    }
+
+    # Every conversion function
+    CONVERSION_FUNCS = {
+        "Length": length_conversions,
+        "Area": area_conversions
+    }
+
+    # Will be removed when conversions is done
+    if choice not in UNIT_OPTIONS:
+        print("Not yet implemented")
+        return
+
+    unit_choices = UNIT_OPTIONS[choice]
+
+    # New questions
     questions = [
-        inquirer.Text("magnitude", message="What's the magnitude of the quantity you want to convert? (ex: 5, 41)"),
-        inquirer.List("old_units", message="What are the units of it?"),
-        inquirer.List("new_units", message="What units do you want to convert to?"),
-
+        inquirer.Text(
+            "magnitude",
+            message="What's the magnitude of the quantity you want to convert? (ex: 5, 41)"
+        ),
+        inquirer.List("old_units", message="What are the units of it?", choices=unit_choices),
+        inquirer.List("new_units", message="What units do you want to convert to?", choices=unit_choices)
     ]
-    match choice:
-        case "Length":
-            questions[1].choices = ["Millimeters", "Centimeters", "Meters", "Kilometers", "Inches", "Feet", "Yards",
-                                    "Miles"]
-            questions[2].choices = ["Millimeters", "Centimeters", "Meters", "Kilometers", "Inches", "Feet", "Yards",
-                                    "Miles"]
-            answers = inquirer.prompt(questions)
-            length_conversions(answers)
 
+    # Ask user and dispatch to proper converter
+    answers = inquirer.prompt(questions)
+    new_quantity = CONVERSION_FUNCS[choice](answers)
+    print(
+        f'{answers["magnitude"]} {answers["old_units"].lower()} '
+        f'converts to {new_quantity.magnitude} {answers["new_units"].lower()}'
+    )
 
 def length_conversions(answers):
-    # Find old unit and new unit and multiply by magnitude
-    match answers["old_units"]:
-        case "Millimeters":
-            old_unit = ureg.millimeters
-        case "Centimeters":
-            old_unit = ureg.centimeters
-        case "Meters":
-            old_unit = ureg.meters
-        case "Kilometers":
-            old_unit = ureg.kilometers
-        case "Inches":
-            old_unit = ureg.inches
-        case "Feet":
-            old_unit = ureg.feet
-        case "Yards":
-            old_unit = ureg.yards
-        case "Miles":
-            old_unit = ureg.miles
-        case _:
-            old_unit = ureg.meters
+    unit_map = {
+        "Millimeters": ureg.millimeters,
+        "Centimeters": ureg.centimeters,
+        "Meters": ureg.meters,
+        "Kilometers": ureg.kilometers,
+        "Inches": ureg.inches,
+        "Feet": ureg.feet,
+        "Yards": ureg.yards,
+        "Miles": ureg.miles
+    }
 
-    match answers["new_units"]:
-        case "Millimeters":
-            new_unit = ureg.millimeters
-        case "Centimeters":
-            new_unit = ureg.centimeters
-        case "Meters":
-            new_unit = ureg.meters
-        case "Kilometers":
-            new_unit = ureg.kilometers
-        case "Inches":
-            new_unit = ureg.inches
-        case "Feet":
-            new_unit = ureg.feet
-        case "Yards":
-            new_unit = ureg.yards
-        case "Miles":
-            new_unit = ureg.miles
+    old_unit = unit_map[answers["old_units"]]
+    new_unit = unit_map[answers["new_units"]]
 
-    old_quantity = int(answers["magnitude"]) * old_unit
+    old_quantity = float(answers["magnitude"]) * old_unit
     new_quantity = old_quantity.to(new_unit)
-    print(answers["magnitude"] + " " + answers["old_units"].lower() + " converts to " + str(
-        new_quantity.magnitude) + " " + answers["new_units"].lower())
+    return new_quantity
+def area_conversions(answers):
+    unit_map = {
+        "Centimeters Squared": ureg.centimeters ** 2,
+        "Meters Squared": ureg.meters ** 2,
+        "Kilometers Squared": ureg.kilometers ** 2,
+        "Inches Squared": ureg.inches ** 2,
+        "Feet Squared": ureg.feet ** 2,
+        "Yards Squared": ureg.yards ** 2,
+        "Acre": ureg.acre,
+        "Miles Squared": ureg.miles ** 2
+    }
 
+    old_unit = unit_map[answers["old_units"]]
+    new_unit = unit_map[answers["new_units"]]
 
-main()
+    old_quantity = float(answers["magnitude"]) * old_unit
+    new_quantity = old_quantity.to(new_unit)
+    return new_quantity
+if __name__ == "__main__":
+    main()

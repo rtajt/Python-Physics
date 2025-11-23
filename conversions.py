@@ -21,16 +21,17 @@ def selector(answers):
     UNIT_OPTIONS = {
         "Length": ["Millimeters", "Centimeters", "Meters", "Kilometers",
                    "Inches", "Feet", "Yards", "Miles"],
-
         "Area": ["Centimeters Squared", "Meters Squared", "Kilometers Squared",
                  "Inches Squared", "Feet Squared", "Yards Squared",
-                 "Acre", "Miles Squared"]
+                 "Acre", "Miles Squared"],
+        "Volume": ["Centimeters Cubed", "Milliliters", "Liters", "Meters Cubed", "Teaspoons", "Tablespoons", "Inches Cubed", "Ounces", "Cups", "Pints", "Quarts", "Gallons", "Feet Cubed"]
     }
 
     # Every conversion function
     CONVERSION_FUNCS = {
         "Length": length_conversions,
-        "Area": area_conversions
+        "Area": area_conversions,
+        "Volume": volume_conversions
     }
 
     # Will be removed when conversions is done
@@ -74,8 +75,8 @@ def length_conversions(answers):
     new_unit = unit_map[answers["new_units"]]
 
     old_quantity = float(answers["magnitude"]) * old_unit
-    new_quantity = old_quantity.to(new_unit)
-    return new_quantity
+    return old_quantity.to(new_unit)
+
 def area_conversions(answers):
     unit_map = {
         "Centimeters Squared": ureg.centimeters ** 2,
@@ -92,7 +93,27 @@ def area_conversions(answers):
     new_unit = unit_map[answers["new_units"]]
 
     old_quantity = float(answers["magnitude"]) * old_unit
-    new_quantity = old_quantity.to(new_unit)
-    return new_quantity
+    return old_quantity.to(new_unit)
+
+def volume_conversions(answers):
+    unit_map = {
+        "Centimeters Cubed": ureg.centimeters ** 3,
+        "Milliliters": ureg.milliliters,
+        "Liters": ureg.liters,
+        "Meters Cubed": ureg.meters ** 3,
+        "Teaspoons": ureg.teaspoons,
+        "Tablespoons Cubed": ureg.tablespoons,
+        "Inches Cubed": ureg.inches ** 3,
+        "Ounces": ureg.ounces,
+        "Cups": ureg.cups,
+        "Pints": ureg.pints,
+        "Quarts": ureg.quarts,
+        "Gallons": ureg.gallons,
+        "Feet Cubed": ureg.feet ** 3
+    }
+    old_unit = unit_map[answers["old_units"]]
+    new_unit = unit_map[answers["new_units"]]
+    old_quantity = float(answers["magnitude"]) * old_unit
+    return old_quantity.to(new_unit)
 if __name__ == "__main__":
     main()

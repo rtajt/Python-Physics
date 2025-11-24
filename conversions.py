@@ -23,14 +23,16 @@ def selector(answers):
         "Area": ["Centimeters Squared", "Meters Squared", "Kilometers Squared",
                  "Inches Squared", "Feet Squared", "Yards Squared",
                  "Acre", "Miles Squared"],
-        "Volume": ["Centimeters Cubed", "Milliliters", "Liters", "Meters Cubed", "Teaspoons", "Tablespoons", "Inches Cubed", "Ounces", "Cups", "Pints", "Quarts", "Gallons", "Feet Cubed"]
+        "Volume": ["Centimeters Cubed", "Milliliters", "Liters", "Meters Cubed", "Teaspoons", "Tablespoons", "Inches Cubed", "Ounces", "Cups", "Pints", "Quarts", "Gallons", "Feet Cubed"],
+        "Time": ["Milliseconds", "Seconds", "Minutes", "Hours", "Days", "Weeks", "Years"]
     }
 
     # Every conversion function
     CONVERSION_FUNCS = {
         "Length": length_conversions,
         "Area": area_conversions,
-        "Volume": volume_conversions
+        "Volume": volume_conversions,
+        "Time": time_conversions
     }
 
     # Will be removed when conversions is done
@@ -50,7 +52,7 @@ def selector(answers):
         inquirer.List("new_units", message="What units do you want to convert to?", choices=unit_choices)
     ]
 
-    # Ask user and dispatch to proper converter
+    # Run converter based on user input
     answers = inquirer.prompt(questions)
     old_unit, new_unit= CONVERSION_FUNCS[choice](answers)
     new_quantity = (float(answers["magnitude"]) * old_unit).to(new_unit)
@@ -100,6 +102,18 @@ def volume_conversions(answers):
         "Quarts": ureg.quarts,
         "Gallons": ureg.gallons,
         "Feet Cubed": ureg.feet ** 3
+    }
+    return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
+
+def time_conversions(answers):
+    unit_map = {
+        "Milliseconds": ureg.milliseconds,
+        "Seconds": ureg.seconds,
+        "Minutes": ureg.minutes,
+        "Hours": ureg.hours,
+        "Days": ureg.days,
+        "Weeks": ureg.weeks,
+        "Years": ureg.years
     }
     return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
 

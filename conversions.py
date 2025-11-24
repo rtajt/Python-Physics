@@ -25,7 +25,8 @@ def selector(answers):
                  "Acre", "Miles Squared"],
         "Volume": ["Centimeters Cubed", "Milliliters", "Liters", "Meters Cubed", "Teaspoons", "Tablespoons", "Inches Cubed", "Ounces", "Cups", "Pints", "Quarts", "Gallons", "Feet Cubed"],
         "Time": ["Milliseconds", "Seconds", "Minutes", "Hours", "Days", "Weeks", "Years"],
-        "Temperature": ["Celsius", "Kelvin", "Fahrenheit"]
+        "Temperature": ["Celsius", "Kelvin", "Fahrenheit"],
+        "Velocity": ["Meters Per Second", "Kilometers Per Hour", "Feet Per Second", "Miles Per Hour"]
     }
 
     # Every conversion function
@@ -34,7 +35,8 @@ def selector(answers):
         "Area": area_conversions,
         "Volume": volume_conversions,
         "Time": time_conversions,
-        "Temperature": temperature_conversions
+        "Temperature": temperature_conversions,
+        "Velocity": velocity_conversions
     }
 
     # Will be removed when conversions is done
@@ -127,5 +129,13 @@ def temperature_conversions(answers):
     }
     return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
 
+def velocity_conversions(answers):
+    unit_map = {
+        "Meters Per Second": ureg.mps,
+        "Kilometers Per Hour": ureg.kph,
+        "Feet Per Second": ureg.fps,
+        "Miles Per Hour": ureg.mph
+    }
+    return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
 if __name__ == "__main__":
     main()

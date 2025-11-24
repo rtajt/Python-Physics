@@ -70,11 +70,7 @@ def length_conversions(answers):
         "Yards": ureg.yards,
         "Miles": ureg.miles
     }
-
-    old_unit = unit_map[answers["old_units"]]
-    new_unit = unit_map[answers["new_units"]]
-
-    return old_unit, new_unit
+    return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
 
 def area_conversions(answers):
     unit_map = {
@@ -87,10 +83,7 @@ def area_conversions(answers):
         "Acre": ureg.acre,
         "Miles Squared": ureg.miles ** 2
     }
-
-    old_unit = unit_map[answers["old_units"]]
-    new_unit = unit_map[answers["new_units"]]
-    return old_unit, new_unit
+    return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
 
 def volume_conversions(answers):
     unit_map = {
@@ -108,9 +101,7 @@ def volume_conversions(answers):
         "Gallons": ureg.gallons,
         "Feet Cubed": ureg.feet ** 3
     }
-    old_unit = unit_map[answers["old_units"]]
-    new_unit = unit_map[answers["new_units"]]
-    return old_unit, new_unit
+    return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
 
 if __name__ == "__main__":
     main()

@@ -26,7 +26,8 @@ def selector(answers):
         "Volume": ["Centimeters Cubed", "Milliliters", "Liters", "Meters Cubed", "Teaspoons", "Tablespoons", "Inches Cubed", "Ounces", "Cups", "Pints", "Quarts", "Gallons", "Feet Cubed"],
         "Time": ["Milliseconds", "Seconds", "Minutes", "Hours", "Days", "Weeks", "Years"],
         "Temperature": ["Celsius", "Kelvin", "Fahrenheit"],
-        "Velocity": ["Meters Per Second", "Kilometers Per Hour", "Feet Per Second", "Miles Per Hour"]
+        "Velocity": ["Meters Per Second", "Kilometers Per Hour", "Feet Per Second", "Miles Per Hour"],
+        "Mass": ["Grams", "Kilograms", "Slugs", "Tons"]
     }
 
     # Every conversion function
@@ -36,7 +37,8 @@ def selector(answers):
         "Volume": volume_conversions,
         "Time": time_conversions,
         "Temperature": temperature_conversions,
-        "Velocity": velocity_conversions
+        "Velocity": velocity_conversions,
+        "Mass": mass_conversions
     }
 
     # Will be removed when conversions is done
@@ -137,5 +139,15 @@ def velocity_conversions(answers):
         "Miles Per Hour": ureg.mph
     }
     return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
+
+def mass_conversions(answers):
+    unit_map = {
+        "Grams": ureg.gram,
+        "Kilograms": ureg.kilograms,
+        "Slugs": ureg.slug,
+        "Tons": ureg.tons,
+    }
+    return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
+
 if __name__ == "__main__":
     main()

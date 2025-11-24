@@ -27,7 +27,8 @@ def selector(answers):
         "Time": ["Milliseconds", "Seconds", "Minutes", "Hours", "Days", "Weeks", "Years"],
         "Temperature": ["Celsius", "Kelvin", "Fahrenheit"],
         "Velocity": ["Meters Per Second", "Kilometers Per Hour", "Feet Per Second", "Miles Per Hour"],
-        "Mass": ["Grams", "Kilograms", "Slugs", "Tons"]
+        "Mass": ["Grams", "Kilograms", "Slugs", "Tons"],
+        "Force": ["Newtons", "Kilogram Force", "Pound Force", "Ton Force"]
     }
 
     # Every conversion function
@@ -38,7 +39,8 @@ def selector(answers):
         "Time": time_conversions,
         "Temperature": temperature_conversions,
         "Velocity": velocity_conversions,
-        "Mass": mass_conversions
+        "Mass": mass_conversions,
+        "Force": force_conversions
     }
 
     # Will be removed when conversions is done
@@ -146,6 +148,15 @@ def mass_conversions(answers):
         "Kilograms": ureg.kilograms,
         "Slugs": ureg.slug,
         "Tons": ureg.tons,
+    }
+    return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
+
+def force_conversions(answers):
+    unit_map = {
+        "Newtons": ureg.newton,
+        "Kilogram Force": ureg.kgf,
+        "Pound Force": ureg.lbf,
+        "Ton Force": ureg.ton_force
     }
     return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
 

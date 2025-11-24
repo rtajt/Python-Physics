@@ -9,3 +9,4 @@ def main():
     match answers["script"]:
         case "Unit Conversions":
             conversions.main()
+main()

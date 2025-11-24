@@ -3,7 +3,6 @@ from pint import UnitRegistry
 
 ureg = UnitRegistry()
 
-
 def main():
     questions = [
         inquirer.List("convert_type", message="What do you want to convert?",

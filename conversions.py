@@ -24,7 +24,8 @@ def selector(answers):
                  "Inches Squared", "Feet Squared", "Yards Squared",
                  "Acre", "Miles Squared"],
         "Volume": ["Centimeters Cubed", "Milliliters", "Liters", "Meters Cubed", "Teaspoons", "Tablespoons", "Inches Cubed", "Ounces", "Cups", "Pints", "Quarts", "Gallons", "Feet Cubed"],
-        "Time": ["Milliseconds", "Seconds", "Minutes", "Hours", "Days", "Weeks", "Years"]
+        "Time": ["Milliseconds", "Seconds", "Minutes", "Hours", "Days", "Weeks", "Years"],
+        "Temperature": ["Celsius", "Kelvin", "Fahrenheit"]
     }
 
     # Every conversion function
@@ -32,7 +33,8 @@ def selector(answers):
         "Length": length_conversions,
         "Area": area_conversions,
         "Volume": volume_conversions,
-        "Time": time_conversions
+        "Time": time_conversions,
+        "Temperature": temperature_conversions
     }
 
     # Will be removed when conversions is done
@@ -114,6 +116,14 @@ def time_conversions(answers):
         "Days": ureg.days,
         "Weeks": ureg.weeks,
         "Years": ureg.years
+    }
+    return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
+
+def temperature_conversions(answers):
+    unit_map = {
+        "Celsius": ureg.degC,
+        "Kelvin": ureg.kelvin,
+        "Fahrenheit": ureg.degF,
     }
     return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
 

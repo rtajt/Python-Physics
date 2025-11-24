@@ -28,7 +28,8 @@ def selector(answers):
         "Temperature": ["Celsius", "Kelvin", "Fahrenheit"],
         "Velocity": ["Meters Per Second", "Kilometers Per Hour", "Feet Per Second", "Miles Per Hour"],
         "Mass": ["Grams", "Kilograms", "Slugs", "Tons"],
-        "Force": ["Newtons", "Kilogram Force", "Pound Force", "Ton Force"]
+        "Force": ["Newtons", "Kilogram Force", "Pound Force", "Ton Force"],
+        "Pressure": ["Pascals", "Kilopascals", "Standard Atmosphere Units"]
     }
 
     # Every conversion function
@@ -40,13 +41,9 @@ def selector(answers):
         "Temperature": temperature_conversions,
         "Velocity": velocity_conversions,
         "Mass": mass_conversions,
-        "Force": force_conversions
+        "Force": force_conversions,
+        "Pressure": pressure_conversions
     }
-
-    # Will be removed when conversions is done
-    if choice not in UNIT_OPTIONS:
-        print("Not yet implemented")
-        return
 
     unit_choices = UNIT_OPTIONS[choice]
 
@@ -157,6 +154,14 @@ def force_conversions(answers):
         "Kilogram Force": ureg.kgf,
         "Pound Force": ureg.lbf,
         "Ton Force": ureg.ton_force
+    }
+    return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
+
+def pressure_conversions(answers):
+    unit_map = {
+        "Pascals": ureg.pascal,
+        "Kilopascals": ureg.kilopascals,
+        "Standard Atmosphere Units": ureg.atm,
     }
     return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
 

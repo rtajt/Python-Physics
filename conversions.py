@@ -89,7 +89,7 @@ def area_conversions(answers):
 
 def volume_conversions(answers):
     unit_map = {
-        "Centimeters Cubed": ureg.centimeters ** 3,
+        "Centimeters Cubed": ureg.cc,
         "Milliliters": ureg.milliliters,
         "Liters": ureg.liters,
         "Meters Cubed": ureg.meters ** 3,

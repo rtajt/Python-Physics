@@ -60,7 +60,14 @@ def selector(answers):
     # Run converter based on user input
     answers = inquirer.prompt(questions)
     old_unit, new_unit= CONVERSION_FUNCS[choice](answers)
-    new_quantity = (float(answers["magnitude"]) * old_unit).to(new_unit)
+
+    if (choice != "Temperature"):
+        new_quantity = (float(answers["magnitude"]) * old_unit).to(new_unit)
+    else:
+        Q_ = ureg.Quantity
+        old_quantity = Q_(float(answers["magnitude"]), old_unit)
+        new_quantity = old_quantity.to(new_unit) 
+
     print(
         f'{answers["magnitude"]} {answers["old_units"].lower()} '
         f'converts to {new_quantity.magnitude} {answers["new_units"].lower()}'

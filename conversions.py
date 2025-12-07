@@ -1,39 +1,43 @@
+"""Inquirer for prompting and pint for unit conversions"""
 import inquirer
 from pint import UnitRegistry
-
 ureg = UnitRegistry()
 
 def main():
+    """Collects user input and passes data into the conversion type selector function"""
     questions = [
         inquirer.List("convert_type", message="What do you want to convert?",
-                      choices=["Length", "Area", "Volume", "Time", "Temperature", "Velocity", "Mass", "Force",
-                               "Pressure"])
+        choices=["Length", "Area", "Volume", "Time", "Temperature", "Velocity", "Mass","Force",
+        "Pressure"])
     ]
     answers = inquirer.prompt(questions)
     selector(answers)
 
-
 def selector(answers):
+    """Based on user input, run respective conversion function and return the new quantity"""
     choice = answers["convert_type"]
 
     # Every unit choice
-    UNIT_OPTIONS = {
+    unit_options = {
         "Length": ["Millimeters", "Centimeters", "Meters", "Kilometers",
                    "Inches", "Feet", "Yards", "Miles"],
         "Area": ["Centimeters Squared", "Meters Squared", "Kilometers Squared",
                  "Inches Squared", "Feet Squared", "Yards Squared",
                  "Acre", "Miles Squared"],
-        "Volume": ["Centimeters Cubed", "Milliliters", "Liters", "Meters Cubed", "Teaspoons", "Tablespoons", "Inches Cubed", "Ounces", "Cups", "Pints", "Quarts", "Gallons", "Feet Cubed"],
+        "Volume": ["Centimeters Cubed", "Milliliters", "Liters", "Meters Cubed", "Teaspoons",
+        "Tablespoons", "Inches Cubed", "Ounces", "Cups", "Pints", "Quarts", "Gallons",
+        "Feet Cubed"],
         "Time": ["Milliseconds", "Seconds", "Minutes", "Hours", "Days", "Weeks", "Years"],
         "Temperature": ["Celsius", "Kelvin", "Fahrenheit"],
-        "Velocity": ["Meters Per Second", "Kilometers Per Hour", "Feet Per Second", "Miles Per Hour"],
+        "Velocity": ["Meters Per Second", "Kilometers Per Hour", "Feet Per Second",
+                     "Miles Per Hour"],
         "Mass": ["Grams", "Kilograms", "Slugs", "Tons"],
         "Force": ["Newtons", "Kilogram Force", "Pound Force", "Ton Force"],
         "Pressure": ["Pascals", "Kilopascals", "Standard Atmosphere Units"]
     }
 
     # Every conversion function
-    CONVERSION_FUNCS = {
+    conversions_funcs = {
         "Length": length_conversions,
         "Area": area_conversions,
         "Volume": volume_conversions,
@@ -45,7 +49,7 @@ def selector(answers):
         "Pressure": pressure_conversions
     }
 
-    unit_choices = UNIT_OPTIONS[choice]
+    unit_choices = unit_options[choice]
 
     # New questions
     questions = [
@@ -54,19 +58,20 @@ def selector(answers):
             message="What's the magnitude of the quantity you want to convert? (ex: 5, 41)"
         ),
         inquirer.List("old_units", message="What are the units of it?", choices=unit_choices),
-        inquirer.List("new_units", message="What units do you want to convert to?", choices=unit_choices)
+        inquirer.List("new_units", message="What units do you want to convert to?",
+        choices=unit_choices)
     ]
 
     # Run converter based on user input
     answers = inquirer.prompt(questions)
-    old_unit, new_unit= CONVERSION_FUNCS[choice](answers)
+    old_unit, new_unit = conversions_funcs[choice](answers)
 
-    if (choice != "Temperature"):
+    if choice != "Temperature":
         new_quantity = (float(answers["magnitude"]) * old_unit).to(new_unit)
     else:
-        Q_ = ureg.Quantity
-        old_quantity = Q_(float(answers["magnitude"]), old_unit)
-        new_quantity = old_quantity.to(new_unit) 
+        q_ = ureg.Quantity
+        old_quantity = q_(float(answers["magnitude"]), old_unit)
+        new_quantity = old_quantity.to(new_unit)
 
     print(
         f'{answers["magnitude"]} {answers["old_units"].lower()} '
@@ -74,6 +79,7 @@ def selector(answers):
     )
 
 def length_conversions(answers):
+    """Converts a given length quantity to a different unit type"""
     unit_map = {
         "Millimeters": ureg.millimeters,
         "Centimeters": ureg.centimeters,
@@ -87,6 +93,7 @@ def length_conversions(answers):
     return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
 
 def area_conversions(answers):
+    """Converts a given area quantity to a different unit type"""
     unit_map = {
         "Centimeters Squared": ureg.centimeters ** 2,
         "Meters Squared": ureg.meters ** 2,
@@ -100,6 +107,7 @@ def area_conversions(answers):
     return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
 
 def volume_conversions(answers):
+    """Converts a given volume quantity to a different unit type"""
     unit_map = {
         "Centimeters Cubed": ureg.cc,
         "Milliliters": ureg.milliliters,
@@ -118,6 +126,7 @@ def volume_conversions(answers):
     return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
 
 def time_conversions(answers):
+    """Converts a given time quantity to a different unit type"""
     unit_map = {
         "Milliseconds": ureg.milliseconds,
         "Seconds": ureg.seconds,
@@ -130,6 +139,7 @@ def time_conversions(answers):
     return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
 
 def temperature_conversions(answers):
+    """Converts a temperature quantity to a different unit type"""
     unit_map = {
         "Celsius": ureg.degC,
         "Kelvin": ureg.kelvin,
@@ -138,6 +148,7 @@ def temperature_conversions(answers):
     return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
 
 def velocity_conversions(answers):
+    """Converts a given velocity quantity to a different unit type"""
     unit_map = {
         "Meters Per Second": ureg.mps,
         "Kilometers Per Hour": ureg.kph,
@@ -147,6 +158,7 @@ def velocity_conversions(answers):
     return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
 
 def mass_conversions(answers):
+    """Converts a given mass quantity to a different unit type"""
     unit_map = {
         "Grams": ureg.gram,
         "Kilograms": ureg.kilograms,
@@ -156,6 +168,7 @@ def mass_conversions(answers):
     return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
 
 def force_conversions(answers):
+    """Converts a given force quantity to a different unit type"""
     unit_map = {
         "Newtons": ureg.newton,
         "Kilogram Force": ureg.kgf,
@@ -165,6 +178,7 @@ def force_conversions(answers):
     return unit_map[answers["old_units"]], unit_map[answers["new_units"]]
 
 def pressure_conversions(answers):
+    """Converts a given pressure quantity to a different unit type"""
     unit_map = {
         "Pascals": ureg.pascal,
         "Kilopascals": ureg.kilopascals,

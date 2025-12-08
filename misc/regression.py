@@ -9,7 +9,7 @@ def main():
         inquirer.Text("xaxis", message="What do you want to name the xaxis?"),
         inquirer.Text("yaxis", message="What do you want to name the yaxis?"),
         inquirer.Text("title", message="What is the title of the graph?"),
-        inquirer.List("type", message="What type of regression do you want to perform?", choices=["Linear", "Quadratic", "Cubic", "Quartic" , "Exponential", "Logarithmic"])
+        inquirer.List("type", message="What type of regression do you want to perform?", choices=["Linear", "Quadratic", "Cubic", "Quartic" , "Exponential", "Logarithmic", "Power Regression"])
     ]
     answers = inquirer.prompt(questions)
     xcoords, ycoords = [], []
@@ -66,6 +66,11 @@ def main():
             constant, intercept, r_squared = round(results[0][0], 6), round(results[0][1], 5), round(results[1], 4)
             function = intercept + constant * np.log(x)
             equation = f"Equation: y = {intercept} + {constant}ln(x)"
+        case "Power Regression":
+            results = polyfit(np.log(x), np.log(y), 1)
+            initial, power, r_squared = round(math.exp(results[0][1]), 6), round(results[0][0], 6), round(results[1], 4)
+            function = initial * (x ** power)
+            equation = f"Equation: y = {initial} * x^{power}"
 
     print(f"{equation}\nR\u00b2: {r_squared}")
     question = [

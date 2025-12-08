@@ -2,13 +2,14 @@ import json
 import inquirer
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 
 def main():
     questions = [
         inquirer.Text("xaxis", message="What do you want to name the xaxis?"),
         inquirer.Text("yaxis", message="What do you want to name the yaxis?"),
         inquirer.Text("title", message="What is the title of the graph?"),
-        inquirer.List("type", message="What type of regression do you want to perform?", choices=["Linear", "Quadratic", "Cubic", "Quartic"])
+        inquirer.List("type", message="What type of regression do you want to perform?", choices=["Linear", "Quadratic", "Cubic", "Quartic" , "Exponential"])
     ]
     answers = inquirer.prompt(questions)
     xcoords, ycoords = [], []
@@ -49,6 +50,11 @@ def main():
             leading, cubic, quadratic, linear, constant, r_squared = round(results[0][0], 5), round(results[0][1], 5), round(results[0][2], 5), round(results[0][3], 6), round(results[0][4],6), round(results[1], 4)
             function = leading * (x ** 4) + cubic * (x ** 3) + quadratic * (x ** 2) + linear * x + constant
             equation = f"Equation: y = {leading}x\u00b4 {sign_char(cubic)} {abs(cubic)}x\u00b3 {sign_char(quadratic)} {abs(quadratic)}x\u00b2 {sign_char(linear)} {abs(linear)}x {sign_char(constant)} {abs(constant)}"
+        case "Exponential":
+            results = polyfit(x, np.log(y), 1)
+            base, initial, r_squared = round(math.exp(results[0][0]), 5), round(math.exp(results[0][1]), 5), round(results[1], 4)
+            function = initial * base ** x
+            equation = f"Equation: y = {initial} * {base}^x"
 
     print(f"{equation}\nR\u00b2: {r_squared}")
     question = [

@@ -14,7 +14,7 @@ def main():
     answers = inquirer.prompt(questions)
     xcoords, ycoords = [], []
 
-    with open('misc/points.json', 'r') as file:
+    with open('settings.json', 'r') as file:
         data = json.load(file)
 
     for point in data["points"]:

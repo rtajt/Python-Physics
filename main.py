@@ -1,7 +1,6 @@
 """Module for a cleaner prompt + all scripts"""
 import inquirer
-from misc import conversions
-
+from misc import conversions, regression
 
 def main():
     """Based on user input, run corresponding script"""
@@ -14,10 +13,12 @@ def main():
         case "Misc":
             questions = [
                 inquirer.List("misc", message="Which misc script do you want to use?",
-                choices=["Conversions"])
+                choices=["Conversions", "Regression"])
             ]
             answers = inquirer.prompt(questions)
             match answers["misc"]:
                 case "Conversions":
                     conversions.main()
+                case "Regression":
+                    regression.main()
 main()

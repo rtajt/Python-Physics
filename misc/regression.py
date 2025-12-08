@@ -9,7 +9,7 @@ def main():
         inquirer.Text("xaxis", message="What do you want to name the xaxis?"),
         inquirer.Text("yaxis", message="What do you want to name the yaxis?"),
         inquirer.Text("title", message="What is the title of the graph?"),
-        inquirer.List("type", message="What type of regression do you want to perform?", choices=["Linear", "Quadratic", "Cubic", "Quartic" , "Exponential"])
+        inquirer.List("type", message="What type of regression do you want to perform?", choices=["Linear", "Quadratic", "Cubic", "Quartic" , "Exponential", "Logarithmic"])
     ]
     answers = inquirer.prompt(questions)
     xcoords, ycoords = [], []
@@ -55,6 +55,17 @@ def main():
             base, initial, r_squared = round(math.exp(results[0][0]), 5), round(math.exp(results[0][1]), 5), round(results[1], 4)
             function = initial * base ** x
             equation = f"Equation: y = {initial} * {base}^x"
+        case "Logarithmic":
+            valid = True
+            for xcoord in xcoords:
+                if xcoord < 0:
+                    valid = False
+            if not valid:
+                return "Invalid data for logarithmic regression (all x values must be positive)"
+            results = polyfit(np.log(x), y, 1)
+            constant, intercept, r_squared = round(results[0][0], 6), round(results[0][1], 5), round(results[1], 4)
+            function = intercept + constant * np.log(x)
+            equation = f"Equation: y = {intercept} + {constant}ln(x)"
 
     print(f"{equation}\nR\u00b2: {r_squared}")
     question = [
